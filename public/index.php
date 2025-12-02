@@ -81,9 +81,18 @@ try {
     }
     
     // Obtener el primer segmento de la ruta
-    $resource = $uriParts[0] ?? '';
+    $resource = $uriParts[1] ?? '';
     
     switch ($resource) {
+        case 'auth':
+            require __DIR__ . '/../src/routes/auth.php';
+            break;
+            
+        case 'notes':
+            require __DIR__ . '/../src/routes/notes.php';
+            break;
+
+        case '':
         case 'docs':
         case 'api-docs':
             header('Content-Type: text/html; charset=utf-8');
