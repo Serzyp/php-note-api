@@ -1,0 +1,1 @@
+Aqui se detallará la función completa de todo el sistema
