@@ -1,7 +1,18 @@
+-- ============================================
+-- Base de Datos para API REST Notes
+-- Versión: 1.0
+-- Fecha: 2 de diciembre de 2025
+-- ============================================
+
 -- Crear base de datos si no existe
 CREATE DATABASE IF NOT EXISTS notes_api;
 
 USE notes_api;
+
+-- ============================================
+-- Tabla: users
+-- Descripción: Almacena información de usuarios registrados
+-- ============================================
 
 CREATE TABLE IF NOT EXISTS users (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -11,6 +22,11 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_email (email)
 );
+
+-- ============================================
+-- Tabla: sessions
+-- Descripción: Almacena tokens de sesión con expiración
+-- ============================================
 
 CREATE TABLE IF NOT EXISTS sessions (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -24,6 +40,11 @@ CREATE TABLE IF NOT EXISTS sessions (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+-- ============================================
+-- Tabla: notes
+-- Descripción: Almacena las notas de los usuarios
+-- ============================================
+
 CREATE TABLE IF NOT EXISTS notes (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id INT UNSIGNED NOT NULL,
@@ -36,3 +57,15 @@ CREATE TABLE IF NOT EXISTS notes (
     INDEX idx_updated_at (updated_at),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+-- Como mejora se podria crear evento para limpiar tokens expirados cada hora
+-- DELIMITER $$
+
+-- CREATE EVENT IF NOT EXISTS clean_expired_tokens
+-- ON SCHEDULE EVERY 1 HOUR
+-- DO
+-- BEGIN
+--     DELETE FROM sessions WHERE expires_at <= NOW();
+-- END$$
+
+-- DELIMITER ;
