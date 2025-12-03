@@ -76,7 +76,7 @@
             margin-right: 5px;
             margin-bottom: 5px;
         }
-        .tag.auth { background: #ffe0b2; }
+        .tag.auth { background: #ffe0b2; margin-left: 5px;}
         table { width: 100%; border-collapse: collapse; margin: 10px 0; }
         table th, table td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
         table th { background: #f8f8f8; font-weight: 600; }
@@ -86,7 +86,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>📝 PHP Note Api API</h1>
+            <h1>📝 PHP Note API</h1>
             <p>API REST en PHP para la creación de notas</p>
             <p style="font-size: 0.9em; margin-top: 10px;">Versión 1.0.0 | PHP, MySQL</p>
         </div>
@@ -99,23 +99,57 @@
 
         <div class="info-box">
             <h2>📋 Endpoints Disponibles</h2>
-            <!-- Aquí irán los endpoints -->
         </div>
 
-        <!-- Ejemplo de Endpoint -->
+        <!-- AUTH ENDPOINTS -->
         <div class="endpoint">
             <div class="endpoint-header">
                 <span class="method post">POST</span>
-                <span class="path">/auth</span>
-                <span class="tag auth">Auth</span>
+                <span class="path">/auth/register</span>
             </div>
-            <div class="description">Descripcion del endpoint</div>
+            <div class="description">Registrar un nuevo usuario en el sistema</div>
             <div class="section">
                 <h4>📥 Request Body:</h4>
-                <pre>{
-                        "name": "Test",
-                        "email": "test@test.test",
-                        "password": "test1234"
+                <pre>
+                    {
+                        "name": "Sergio",
+                        "email": "sergio@ejemplo.com",
+                        "password": "password123"
+                    }           
+                </pre>
+            </div>
+            <div class="section">
+                <h4>✅ Response (201):</h4>
+                <pre>
+                    {
+                        "success": true,
+                        "message": "Usuario registrado exitosamente",
+                        "data": {
+                            "user": {
+                                "id": 1,
+                                "name": "Sergio",
+                                "email": "sergio@ejemplo.com",
+                                "created_at": "2025-12-02 10:00:00"
+                            },
+                            "token": "abc123..."
+                        }
+                    }
+                </pre>
+            </div>
+        </div>
+
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="path">/auth/login</span>
+            </div>
+            <div class="description">Iniciar sesión con credenciales de usuario</div>
+            <div class="section">
+                <h4>📥 Request Body:</h4>
+                <pre>
+                    {
+                        "email": "sergio@ejemplo.com",
+                        "password": "password123"
                     }
                 </pre>
             </div>
@@ -124,7 +158,213 @@
                 <pre>
                     {
                         "success": true,
-                        "message": "Ejemplo de respuesta exitosa",
+                        "message": "Login exitoso",
+                        "data": {
+                            "user": {
+                                "id": 1,
+                                "name": "Sergio",
+                                "email": "sergio@ejemplo.com",
+                                "created_at": "2025-12-02 10:00:00"
+                            },
+                            "token": "abc123..."
+                        }
+                    }
+                </pre>
+            </div>
+        </div>
+
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="path">/auth/me</span>
+                <span class="tag auth">🔒</span>
+            </div>
+            <div class="description">Obtener información del usuario autenticado</div>
+            <div class="section">
+                <h4>✅ Response (200):</h4>
+                <pre>
+                    {
+                        "success": true,
+                        "message": "Información del usuario obtenida",
+                        "data": {
+                            "id": 1,
+                            "name": "Sergio",
+                            "email": "sergio@ejemplo.com",
+                            "created_at": "2025-12-02 10:00:00"
+                        }
+                    }
+                </pre>
+            </div>
+        </div>
+
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="path">/auth/logout</span>
+            </div>
+            <div class="description">Cerrar sesión (invalidar token actual)</div>
+            <div class="section">
+                <h4>✅ Response (200):</h4>
+                <pre>
+                    {
+                        "success": true,
+                        "message": "Logout exitoso",
+                        "data": null
+                    }
+                </pre>
+            </div>
+        </div>
+
+        <!-- NOTES ENDPOINTS -->
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="path">/notes</span>
+                <span class="tag auth">🔒</span>
+            </div>
+            <div class="description">Crear una nueva nota para el usuario autenticado</div>
+            <div class="section">
+                <h4>📥 Request Body:</h4>
+                <pre>
+                    {
+                        "title": "Mi primera nota",
+                        "content": "Este es el contenido de mi nota..."
+                    }           
+                </pre>
+            </div>
+            <div class="section">
+                <h4>✅ Response (201):</h4>
+                <pre>
+                    {
+                        "success": true,
+                        "message": "Nota creada exitosamente",
+                        "data": {
+                            "id": 1,
+                            "title": "Mi primera nota",
+                            "content": "Este es el contenido de mi nota...",
+                            "created_at": "2025-12-02 10:30:00",
+                            "updated_at": "2025-12-02 10:30:00"
+                        }
+                    }
+                </pre>
+            </div>
+        </div>
+
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="path">/notes</span>
+                <span class="tag auth">🔒</span>
+            </div>
+            <div class="description">Obtener todas las notas del usuario autenticado</div>
+            <div class="section">
+                <h4>✅ Response (200):</h4>
+                <pre>
+                    {
+                        "success": true,
+                        "message": "Notas obtenidas exitosamente",
+                        "data": {
+                            "notes": [
+                                {
+                                    "id": 1,
+                                    "title": "Mi primera nota",
+                                    "content": "Contenido...",
+                                    "created_at": "2025-12-02 10:30:00",
+                                    "updated_at": "2025-12-02 10:30:00"
+                                }
+                            ],
+                            "total": 1
+                        }
+                    }
+                </pre>
+            </div>
+        </div>
+
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="path">/notes?id={id}</span>
+                <span class="tag auth">🔒</span>
+            </div>
+            <div class="description">Obtener una nota específica por ID</div>
+            <div class="section">
+                <h4>📥 Query Parameters:</h4>
+                <pre>id (integer, required): ID de la nota a obtener</pre>
+            </div>
+            <div class="section">
+                <h4>✅ Response (200):</h4>
+                <pre>
+                    {
+                        "success": true,
+                        "message": "Nota obtenida exitosamente",
+                        "data": {
+                            "id": 1,
+                            "title": "Mi primera nota",
+                            "content": "Contenido...",
+                            "created_at": "2025-12-02 10:30:00",
+                            "updated_at": "2025-12-02 10:30:00"
+                        }
+                    }
+                </pre>
+            </div>
+        </div>
+
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method put">PUT</span>
+                <span class="path">/notes?id={id}</span>
+                <span class="tag auth">🔒</span>
+            </div>
+            <div class="description">Actualizar una nota existente</div>
+            <div class="section">
+                <h4>📥 Query Parameters:</h4>
+                <pre>id (integer, required): ID de la nota a actualizar</pre>
+            </div>
+            <div class="section">
+                <h4>📥 Request Body (campos opcionales):</h4>
+                <pre>
+                    {
+                        "title": "Título actualizado",
+                        "content": "Contenido actualizado..."
+                    }           
+                </pre>
+            </div>
+            <div class="section">
+                <h4>✅ Response (200):</h4>
+                <pre>
+                {
+                    "success": true,
+                    "message": "Nota actualizada exitosamente",
+                    "data": {
+                        "id": 1,
+                        "title": "Título actualizado",
+                        "content": "Contenido actualizado...",
+                        "created_at": "2025-12-02 10:30:00",
+                        "updated_at": "2025-12-02 11:00:00"
+                    }
+                }
+                </pre>
+            </div>
+        </div>
+
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method delete">DELETE</span>
+                <span class="path">/notes?id={id}</span>
+                <span class="tag auth">🔒</span>
+            </div>
+            <div class="description">Eliminar una nota permanentemente</div>
+            <div class="section">
+                <h4>📥 Query Parameters:</h4>
+                <pre>id (integer, required): ID de la nota a eliminar</pre>
+            </div>
+            <div class="section">
+                <h4>✅ Response (200):</h4>
+                <pre>
+                    {
+                        "success": true,
+                        "message": "Nota eliminada exitosamente",
+                        "data": null
                     }
                 </pre>
             </div>
@@ -147,10 +387,13 @@
         <div class="info-box">
             <h2>📝 Ejemplo de Uso con cURL</h2>
             <pre>
-                curl -X POST http://localhost/api/notes \
-                -H "Content-Type: application/json" \
-                -H "Authorization: Bearer TU_TOKEN_AQUI" \
-                -d '{"ejemplo":"test","ejemplo2":"Contenido"}'
+                curl --location 'http://localhost:8080/php-note-api/auth/register' \
+                --header 'Content-Type: text/plain' \
+                --data-raw '{
+                    "name": "Sergio",
+                    "email": "sergio@ejemplo.com",
+                    "password": "password123"
+                }'
             </pre>
         </div>
 
